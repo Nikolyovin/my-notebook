@@ -3,8 +3,8 @@ import MenuIcon from '@mui/icons-material/Menu'
 import { IconButton } from '@mui/material'
 
 const Header: FC = () => {
-    const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
+    const onClick: () => void = () => {
+        // event.preventDefault()
     }
 
     return (
