@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { IWishlist } from '../../types/types'
 
 type initialStateType = {
-    withList: string[] 
+    withList: IWishlist[]
     isMenu: boolean
 }
 
@@ -14,13 +15,15 @@ export const notebookSlice = createSlice({
     name: 'notebook',
     initialState,
     reducers: {
-        addInWithList(state, action: PayloadAction<string>){
-            console.log('action',action.payload);
-            
-            state.withList?.push(action.payload)
+        addInWithList(state, action: PayloadAction<string>) {
+            state.withList?.push({ entry: action.payload, id: String(Date.now()), isHighlighted: false })
         },
-        isOpenMenu(state, action: PayloadAction<boolean>){
+        isOpenMenu(state, action: PayloadAction<boolean>) {
             state.isMenu = action.payload
+        },
+        isHighlight(state, action: PayloadAction<string>) {},
+        removeEntry(state, action: PayloadAction<string>) {
+            state.withList = state.withList?.filter(item => item.id !== action.payload)
         }
     }
 })
