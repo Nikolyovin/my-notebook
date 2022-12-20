@@ -10,5 +10,5 @@ export const store = configureStore({
 
 setupListeners(store.dispatch)
 
-//создаем чтобы знать с какими данными работать в стейте
+//создаем чтобы знать с какими данными работать в стейте, need for useAppSelector
 export type RootState = ReturnType<typeof store.getState>

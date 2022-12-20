@@ -1,12 +1,12 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 type initialStateType = {
-    withList: string[] | null
+    withList: string[] 
     isMenu: boolean
 }
 
 const initialState: initialStateType = {
-    withList: null,
+    withList: [],
     isMenu: false
 }
 
@@ -15,6 +15,8 @@ export const notebookSlice = createSlice({
     initialState,
     reducers: {
         addInWithList(state, action: PayloadAction<string>){
+            console.log('action',action.payload);
+            
             state.withList?.push(action.payload)
         },
         isOpenMenu(state, action: PayloadAction<boolean>){
