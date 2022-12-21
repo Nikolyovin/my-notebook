@@ -1,14 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { IWishlist } from '../../types/types'
+import { ActiveTab } from '../../common'
+import {  IEntry} from '../../types/types'
 
-type initialStateType = {
-    withList: IWishlist[]
+interface IInitialState {
+    withList: IEntry[]
+    roadMap: IEntry[]
+    buyInTheStore: IEntry[]
     isMenu: boolean
+    activeTab: string
 }
 
-const initialState: initialStateType = {
+const initialState: IInitialState = {
     withList: [],
-    isMenu: false
+    roadMap: [],
+    buyInTheStore: [],
+    isMenu: false,
+    activeTab: ActiveTab.WithList
 }
 
 export const notebookSlice = createSlice({
@@ -16,14 +23,48 @@ export const notebookSlice = createSlice({
     initialState,
     reducers: {
         addInWithList(state, action: PayloadAction<string>) {
-            state.withList?.push({ entry: action.payload, id: String(Date.now()), isHighlighted: false })
+            switch(state.activeTab) {
+                case ActiveTab.WithList: state.withList?.push({ entry: action.payload, id: String(Date.now()), isHighlighted: false }) 
+                    break
+                case ActiveTab.RoadMap: state.roadMap?.push({ entry: action.payload, id: String(Date.now()), isHighlighted: false })
+                    break
+                case ActiveTab.BuyInTheStore: state.buyInTheStore?.push({ entry: action.payload, id: String(Date.now()), isHighlighted: false })
+                    break
+                default: state
+            }
+            
         },
         isOpenMenu(state, action: PayloadAction<boolean>) {
             state.isMenu = action.payload
         },
-        isHighlight(state, action: PayloadAction<string>) {},
+        updateActiveTab(state, action: PayloadAction<string>) {
+            state.activeTab = action.payload
+        },
+        isHighlight(state, action: PayloadAction<string>) {
+            switch(state.activeTab) {
+                case ActiveTab.WithList:  state.withList = state.withList?.map(entry => entry.id === action.payload 
+                    ? { ...entry, isHighlighted: !entry.isHighlighted} : entry)
+                        break
+                case ActiveTab.RoadMap:  state.roadMap = state.roadMap?.map(entry => entry.id === action.payload 
+                    ? { ...entry, isHighlighted: !entry.isHighlighted} : entry)
+                        break
+                case ActiveTab.BuyInTheStore:  state.buyInTheStore = state.buyInTheStore?.map(entry => entry.id === action.payload 
+                    ? { ...entry, isHighlighted: !entry.isHighlighted} : entry)
+                        break
+                default: state
+            }
+           
+        },
         removeEntry(state, action: PayloadAction<string>) {
-            state.withList = state.withList?.filter(item => item.id !== action.payload)
+            switch(state.activeTab) {
+                case ActiveTab.WithList: state.withList = state.withList?.filter(item => item.id !== action.payload) 
+                    break
+                case ActiveTab.RoadMap: state.roadMap = state.roadMap?.filter(item => item.id !== action.payload)
+                    break
+                case ActiveTab.BuyInTheStore: state.buyInTheStore = state.buyInTheStore?.filter(item => item.id !== action.payload)
+                    break
+                default: state
+            }
         }
     }
 })

@@ -1,4 +1,4 @@
-import { Checkbox, IconButton } from '@mui/material'
+import { IconButton } from '@mui/material'
 import React, { FC } from 'react'
 import EditIcon from '@mui/icons-material/Edit'
 import ClearIcon from '@mui/icons-material/Clear'
@@ -7,21 +7,24 @@ import { useActions } from '../../hooks/action'
 interface IProps {
     entry: string
     id: string
+    isHighlighted: boolean
 }
 
-const Card: FC<IProps> = ({ id, entry }) => {
-    const { removeEntry } = useActions()
+const Card: FC<IProps> = ({ id, entry, isHighlighted }) => {
+    const { removeEntry, isHighlight } = useActions()
 
-    const onHighlight: () => void = () => {}
+    const onHighlight: () => void = () => isHighlight(id)
 
-    const onRemove: () => void = () => {
-        removeEntry(id)
-    }
+    const onRemove: () => void = () => removeEntry(id)
+
+    const lineThrough: string = isHighlighted ? 'line-through' : ''
 
     return (
-        <div className='flex items-center bg-slate-300 rounded-md py-3 pr-3 pl-5 w-[100%] mb-3'>
-            <span className='flex-1 text-2xl'>{entry}</span>
-            <IconButton className='justify-end' onClick={onHighlight}>
+        <div className='flex items-center bg-slate-300 rounded-md py-3 pr-3 pl-5 mb-3 '>
+            <div className='flex-1'>
+                <p className={`text-xl break-words ${lineThrough}`}>{entry}</p>
+            </div>
+            <IconButton onClick={onHighlight}>
                 <EditIcon fontSize='large' />
             </IconButton>
             <IconButton onClick={onRemove}>

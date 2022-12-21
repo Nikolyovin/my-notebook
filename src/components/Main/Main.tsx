@@ -1,7 +1,6 @@
 import React, { FC } from 'react'
 import { useAppSelector } from '../../hooks/redux'
 import Content from './Content'
-import InputPanel from './InputPanel'
 import Menu from './Menu'
 
 const Main: FC = () => {

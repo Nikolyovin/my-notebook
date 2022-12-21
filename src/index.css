@@ -6,6 +6,6 @@
 
     /*чтобы стили после, .menu-item можно было переназначить*/
     .menu-item {
-        @apply font-serif text-2xl pb-5
+        @apply font-serif text-2xl pt-5
     }
 }

@@ -1,11 +1,30 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
+import { TABS } from '../../common'
+import { useActions } from '../../hooks/action'
+import { useAppSelector } from '../../hooks/redux'
 
 const Menu: FC = () => {
+    const { activeTab } = useAppSelector(state => state.notebook)
+    const { updateActiveTab, isOpenMenu } = useActions()
+    const [active, setActive] = useState<string>(activeTab)
+
+    const onClick: (id: string) => void = id => {
+        updateActiveTab(id)
+        setActive(id)
+        isOpenMenu(false)
+    }
+
     return (
         <div className='flex flex-col pt-52 items-center bg-slate-400 w-[100%] h-[100vh] '>
-            <div className='menu-item'>Wish list</div>
-            <div className='menu-item'>Road map</div>
-            <div className='menu-item'>Buy in the store</div>
+            {TABS.map(({ id, title }) => (
+                <div
+                    key={id}
+                    onClick={() => onClick(id)}
+                    className={`menu-item ${active === id && 'border-b-4 text-white'}`}
+                >
+                    {title}
+                </div>
+            ))}
         </div>
     )
 }

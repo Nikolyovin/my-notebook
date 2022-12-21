@@ -7,14 +7,13 @@ const InputPanel: FC = () => {
     const { addInWithList } = useActions()
     const [value, setValue] = useState<string>('')
 
-    const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setValue(e.currentTarget.value)
-    }
+    const onChange = (e: ChangeEvent<HTMLInputElement>) => setValue(e.currentTarget.value)
 
     const submitForm: () => void = () => {
         addInWithList(value)
         setValue('')
     }
+
     return (
         <form className='flex flex-row justify-between w-[100%]  p-5'>
             <TextField
