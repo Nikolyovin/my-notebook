@@ -37,7 +37,7 @@ const Content: FC = () => {
     }
 
     return (
-        <div className='flex flex-col items-center w-full'>
+        <div className='flex flex-col justify-center items-center w-full md:w-[65%]'>
             <InputPanel />
             <CardList />
             <Modal

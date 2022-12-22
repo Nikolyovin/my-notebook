@@ -16,7 +16,7 @@ const Menu: FC = () => {
     }
 
     return (
-        <div className='flex flex-col pt-52 items-center bg-slate-400 w-[100%] h-[100vh] '>
+        <div className='flex flex-col pt-52 items-center bg-slate-400 w-[100%] h-[100vh] md:hidden'>
             {TABS.map(({ id, title }) => (
                 <div
                     key={id}

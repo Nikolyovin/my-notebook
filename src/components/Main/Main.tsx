@@ -7,7 +7,7 @@ const Main: FC = () => {
     const { isMenu } = useAppSelector(state => state.notebook)
 
     return (
-        <div className='flex justify-between items-center '>
+        <div className='flex justify-center items-center w-full'>
             {!isMenu && <Content />}
             {isMenu && <Menu />}
         </div>
