@@ -1,5 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ActiveTab } from '../../common'
+import { createSlice, current, PayloadAction } from '@reduxjs/toolkit'
+import { ActiveTab, addEntryInState, isHighlightInState, removeEntryInState, setLocalStorage } from '../../common'
 import { IEntry } from '../../types/types'
 
 const LS_withList_KEY: string = ActiveTab.WithList
@@ -13,6 +13,8 @@ interface IInitialState {
     buyInTheStore: IEntry[]
     isMenu: boolean
     activeTab: string
+    isModalRemove: boolean,
+    removeObject: IEntry | null
 }
 
 const initialState: IInitialState = {
@@ -20,7 +22,9 @@ const initialState: IInitialState = {
     roadMap: JSON.parse(localStorage.getItem(LS_roadMap_KEY) ?? '[]'),
     buyInTheStore: JSON.parse(localStorage.getItem(LS_buyInTheStore_KEY) ?? '[]'),
     isMenu: false,
-    activeTab: JSON.parse(localStorage.getItem(LS_activeTab_KEY) ?? '[]')
+    activeTab: JSON.parse(localStorage.getItem(LS_activeTab_KEY)!) ??  ActiveTab.WithList,               // ! восклицательный знак, чтобы успокоить tsz
+    isModalRemove: false,
+    removeObject: null
 }
 
 export const notebookSlice = createSlice({
@@ -30,67 +34,70 @@ export const notebookSlice = createSlice({
         addInWithList(state, action: PayloadAction<string>) {
             switch (state.activeTab) {
                 case ActiveTab.WithList:
-                    state.withList?.push({ entry: action.payload, id: String(Date.now()), isHighlighted: false })
-                    localStorage.setItem(LS_withList_KEY, JSON.stringify(state.withList))
+                    addEntryInState(state.withList, action.payload)
+                    setLocalStorage(LS_withList_KEY, state.withList)
                     break
-
                 case ActiveTab.RoadMap:
-                    state.roadMap?.push({ entry: action.payload, id: String(Date.now()), isHighlighted: false })
-                    localStorage.setItem(LS_roadMap_KEY, JSON.stringify(state.roadMap))
+                    addEntryInState(state.roadMap, action.payload)
+                    setLocalStorage(LS_roadMap_KEY, state.roadMap)
                     break
                 case ActiveTab.BuyInTheStore:
-                    state.buyInTheStore?.push({ entry: action.payload, id: String(Date.now()), isHighlighted: false })
-                    localStorage.setItem(LS_buyInTheStore_KEY, JSON.stringify(state.buyInTheStore))
+                    addEntryInState(state.buyInTheStore, action.payload)
+                    setLocalStorage(LS_buyInTheStore_KEY, state.buyInTheStore)
                     break
-                // default: state
             }
+            
         },
+
         isOpenMenu(state, action: PayloadAction<boolean>) {
             state.isMenu = action.payload
         },
+
         updateActiveTab(state, action: PayloadAction<string>) {
             state.activeTab = action.payload
             localStorage.setItem(LS_activeTab_KEY, JSON.stringify(state.activeTab))
         },
+
         isHighlight(state, action: PayloadAction<string>) {
             switch (state.activeTab) {
                 case ActiveTab.WithList:
-                    state.withList = state.withList?.map(entry =>
-                        entry.id === action.payload ? { ...entry, isHighlighted: !entry.isHighlighted } : entry
-                    )
-                    localStorage.setItem(LS_withList_KEY, JSON.stringify(state.withList))
+                    state.withList = isHighlightInState(state.withList, action.payload)
+                    setLocalStorage(LS_withList_KEY, state.withList)
                     break
                 case ActiveTab.RoadMap:
-                    state.roadMap = state.roadMap?.map(entry =>
-                        entry.id === action.payload ? { ...entry, isHighlighted: !entry.isHighlighted } : entry
-                    )
-                    localStorage.setItem(LS_roadMap_KEY, JSON.stringify(state.roadMap))
+                    state.roadMap = isHighlightInState(state.roadMap, action.payload)
+                    setLocalStorage(LS_roadMap_KEY, state.roadMap)
                     break
                 case ActiveTab.BuyInTheStore:
-                    state.buyInTheStore = state.buyInTheStore?.map(entry =>
-                        entry.id === action.payload ? { ...entry, isHighlighted: !entry.isHighlighted } : entry
-                    )
-                    localStorage.setItem(LS_buyInTheStore_KEY, JSON.stringify(state.buyInTheStore))
+                    state.buyInTheStore = isHighlightInState(state.buyInTheStore, action.payload)
+                    setLocalStorage(LS_buyInTheStore_KEY, state.buyInTheStore)
                     break
-                // default: state
             }
         },
+        
         removeEntry(state, action: PayloadAction<string>) {
             switch (state.activeTab) {
                 case ActiveTab.WithList:
-                    state.withList = state.withList?.filter(item => item.id !== action.payload)
-                    localStorage.setItem(LS_withList_KEY, JSON.stringify(state.withList))
+                    state.withList = removeEntryInState(state.withList, action.payload)
+                    setLocalStorage(LS_withList_KEY, state.withList)
                     break
                 case ActiveTab.RoadMap:
-                    state.roadMap = state.roadMap?.filter(item => item.id !== action.payload)
-                    localStorage.setItem(LS_roadMap_KEY, JSON.stringify(state.roadMap))
+                    state.roadMap = removeEntryInState(state.roadMap, action.payload)
+                    setLocalStorage(LS_roadMap_KEY, state.roadMap)
                     break
                 case ActiveTab.BuyInTheStore:
-                    state.buyInTheStore = state.buyInTheStore?.filter(item => item.id !== action.payload)
-                    localStorage.setItem(LS_buyInTheStore_KEY, JSON.stringify(state.buyInTheStore))
+                    state.buyInTheStore = removeEntryInState(state.buyInTheStore, action.payload)
+                    setLocalStorage(LS_buyInTheStore_KEY, state.buyInTheStore)
                     break
-                // default: state
             }
+        },
+
+        isToOpenModal(state, action: PayloadAction<boolean>) {
+            state.isModalRemove = action.payload
+        },
+
+        removeThisObject(state, action: PayloadAction<IEntry | null>){
+            state.removeObject = action.payload
         }
     }
 })

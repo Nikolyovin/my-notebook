@@ -10,7 +10,7 @@ const Header: FC = () => {
     const { isMenu, activeTab } = useAppSelector(state => state.notebook)
     const { isOpenMenu } = useActions()
 
-    const title: string = TABS.find(el => el.id === activeTab)?.title ?? ''
+    const title: string = TABS.find(el => el.id === activeTab)?.title ?? 'Wish list'
 
     const onClick: () => void = () => isOpenMenu(!isMenu)
 

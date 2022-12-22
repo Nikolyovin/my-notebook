@@ -7,6 +7,7 @@ const Menu: FC = () => {
     const { activeTab } = useAppSelector(state => state.notebook)
     const { updateActiveTab, isOpenMenu } = useActions()
     const [active, setActive] = useState<string>(activeTab)
+    console.log('activeTab', activeTab)
 
     const onClick: (id: string) => void = id => {
         updateActiveTab(id)

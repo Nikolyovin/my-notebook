@@ -11,18 +11,21 @@ interface IProps {
 }
 
 const Card: FC<IProps> = ({ id, entry, isHighlighted }) => {
-    const { removeEntry, isHighlight } = useActions()
+    const { isHighlight, isToOpenModal, removeThisObject } = useActions()
 
     const onHighlight: () => void = () => isHighlight(id)
 
-    const onRemove: () => void = () => removeEntry(id)
+    const onRemove: () => void = () => {
+        isToOpenModal(true)
+        removeThisObject({ id, entry, isHighlighted })
+    }
 
     const lineThrough: string = isHighlighted ? 'line-through' : ''
 
     return (
         <div className='flex items-center bg-slate-300 rounded-md py-3 pr-3 pl-5 mb-3 '>
-            <div className='flex-1'>
-                <p className={`text-xl break-words ${lineThrough}`}>{entry}</p>
+            <div className='flex-1 w-[65%]'>
+                <p className={`text-lg break-words ${lineThrough}`}>{entry}</p>
             </div>
             <IconButton onClick={onHighlight}>
                 <EditIcon fontSize='large' />
