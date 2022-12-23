@@ -2,10 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @layer base {
+    @font-face {
+        font-family: 'robotoRegular';
+        font-weight: 400;
+        src: url(/src/fonts/Roboto-Regular.ttf) format("truetype");
+      }
+  
+  } */
+  body {
+    font-family: "Roboto";
+    font-weight:bold;
+  }
+
 @layer components {
 
     /*чтобы стили после, .menu-item можно было переназначить*/
     .menu-item {
-        @apply font-serif text-2xl pt-5
+        @apply font-semibold text-2xl pt-5
     }
 }

@@ -24,8 +24,8 @@ const Card: FC<IProps> = ({ id, entry, isHighlighted }) => {
 
     return (
         <div className='flex items-center bg-slate-300 rounded-md py-3 pr-3 pl-5 mb-3 '>
-            <div className='flex-1 w-[65%]'>
-                <p className={`text-lg break-words ${lineThrough}`}>{entry}</p>
+            <div className=' w-[65%]'>
+                <p className={`text-lg break-words font-normal ${lineThrough}`}>{entry}</p>
             </div>
             <IconButton onClick={onHighlight}>
                 <EditIcon fontSize='large' />

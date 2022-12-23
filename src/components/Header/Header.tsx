@@ -26,7 +26,7 @@ const Header: FC = () => {
                         <RestoreFromTrashIcon fontSize='large' sx={{ color: 'white' }} />
                     </IconButton>
                 </div>
-                <h1 className='text-2xl font-serif text-white'>{title}</h1>
+                <h1 className='text-2xl heading  text-white'>{title}</h1>
 
                 <div className='hidden md:block'>
                     <MenuDesktop />
