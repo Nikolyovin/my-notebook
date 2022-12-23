@@ -7,31 +7,37 @@ import { useActions } from '../../hooks/action'
 import { TABS } from '../../common'
 import MenuDesktop from './MenuDesktop'
 import Button from '@mui/material/Button'
+import RestoreFromTrashIcon from '@mui/icons-material/RestoreFromTrash'
 
 const Header: FC = () => {
     const { isMenu, activeTab } = useAppSelector(state => state.notebook)
-    const { isOpenMenu } = useActions()
+    const { isOpenMenu, isToOpenModal, removeThisArray } = useActions()
 
     const title: string = TABS.find(el => el.id === activeTab)?.title ?? 'Wish list'
 
     const onClick: () => void = () => isOpenMenu(!isMenu)
+    const onClickRemove: () => void = () => isToOpenModal(true) && removeThisArray(activeTab)
 
     return (
         <div className='flex justify-center bg-slate-500 px-3 '>
             <div className='flex justify-between items-center h-[80px] w-full md:w-[65%]'>
-                <div className='pl-2 '>
-                    <Button variant='text' sx={{ color: 'white', fontSize: 14, fontWeight: 'bold' }}>
-                        <span className=''>remove</span>
-                    </Button>
+                <div>
+                    <IconButton className='md:hidden' onClick={onClickRemove}>
+                        <RestoreFromTrashIcon fontSize='large' sx={{ color: 'white' }} />
+                    </IconButton>
                 </div>
-                <h1 className='text-2xl font-serif'>{title}</h1>
+                <h1 className='text-2xl font-serif text-white'>{title}</h1>
 
                 <div className='hidden md:block'>
                     <MenuDesktop />
                 </div>
                 <div className='md:hidden'>
                     <IconButton className='md:hidden' onClick={onClick}>
-                        {!isMenu ? <MenuIcon fontSize='large' /> : <CloseIcon fontSize='large' />}
+                        {!isMenu ? (
+                            <MenuIcon fontSize='large' sx={{ color: 'white' }} />
+                        ) : (
+                            <CloseIcon fontSize='large' sx={{ color: 'white' }} />
+                        )}
                     </IconButton>
                 </div>
             </div>

@@ -21,13 +21,16 @@ const style = {
 }
 
 const Content: FC = () => {
-    const { isModalRemove, removeObject } = useAppSelector(state => state.notebook)
-    const { isToOpenModal, removeThisObject, removeEntry } = useActions()
+    const { isModalRemove, removeObject, removeArray } = useAppSelector(state => state.notebook)
+    const { isToOpenModal, removeThisObject, removeEntry, removeThisArray, removeAllArray } = useActions()
 
     const clear: () => void = () => {
         isToOpenModal(false)
         removeThisObject(null)
+        removeThisArray(null)
     }
+
+    console.log('removeArray', removeArray)
 
     const onCancel: () => void = () => clear()
 
@@ -36,13 +39,14 @@ const Content: FC = () => {
         clear()
     }
 
+    const onRemoveAll: (id: string) => void = id => removeAllArray(id) && clear()
+
     return (
-        <div className='flex flex-col justify-center items-center w-full md:w-[65%]'>
+        <div className='flex flex-col justify-center items-center w-full md:w-[50%]'>
             <InputPanel />
             <CardList />
             <Modal
                 open={isModalRemove}
-                // onClose={handleClose}
                 aria-labelledby='parent-modal-title'
                 aria-describedby='parent-modal-description'
             >
@@ -51,20 +55,14 @@ const Content: FC = () => {
                         Attention!
                     </h2>
                     <p id='parent-modal-description' className='flex justify-center text-ms'>
-                        Do you really want to delete the entry: {removeObject?.entry}?
+                        Do you really want to delete the entry: {removeObject ? removeObject?.entry : removeArray}?
                     </p>
 
-                    {removeObject && (
-                        <div className='flex justify-center pt-5 items-center'>
-                            <Button
-                                onClick={onCancel}
-                                size='small'
-                                variant='outlined'
-                                color='primary'
-                                sx={{ mr: '10px' }}
-                            >
-                                Cancel
-                            </Button>
+                    <div className='flex justify-center pt-5 items-center'>
+                        <Button onClick={onCancel} size='small' variant='outlined' color='primary' sx={{ mr: '10px' }}>
+                            Cancel
+                        </Button>
+                        {removeObject && (
                             <Button
                                 onClick={() => onRemove(removeObject.id)}
                                 size='small'
@@ -73,8 +71,18 @@ const Content: FC = () => {
                             >
                                 Yes
                             </Button>
-                        </div>
-                    )}
+                        )}
+                        {removeArray && (
+                            <Button
+                                onClick={() => onRemoveAll(removeArray)}
+                                size='small'
+                                variant='contained'
+                                color='primary'
+                            >
+                                Yes
+                            </Button>
+                        )}
+                    </div>
                 </Box>
             </Modal>
         </div>

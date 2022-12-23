@@ -13,8 +13,9 @@ interface IInitialState {
     buyInTheStore: IEntry[]
     isMenu: boolean
     activeTab: string
-    isModalRemove: boolean,
+    isModalRemove: boolean
     removeObject: IEntry | null
+    removeArray: string | null
 }
 
 const initialState: IInitialState = {
@@ -22,9 +23,10 @@ const initialState: IInitialState = {
     roadMap: JSON.parse(localStorage.getItem(LS_roadMap_KEY) ?? '[]'),
     buyInTheStore: JSON.parse(localStorage.getItem(LS_buyInTheStore_KEY) ?? '[]'),
     isMenu: false,
-    activeTab: JSON.parse(localStorage.getItem(LS_activeTab_KEY)!) ??  ActiveTab.WithList,               // ! восклицательный знак, чтобы успокоить tsz
+    activeTab: JSON.parse(localStorage.getItem(LS_activeTab_KEY)!) ??  ActiveTab.WithList,               // ! восклицательный знак, чтобы успокоить ts
     isModalRemove: false,
-    removeObject: null
+    removeObject: null,
+    removeArray: null
 }
 
 export const notebookSlice = createSlice({
@@ -98,6 +100,25 @@ export const notebookSlice = createSlice({
 
         removeThisObject(state, action: PayloadAction<IEntry | null>){
             state.removeObject = action.payload
+        },
+        removeThisArray(state, action: PayloadAction<string | null>){
+            state.removeArray = action.payload
+        },
+        removeAllArray(state, action: PayloadAction<string>) {
+            switch (state.activeTab) {
+                case ActiveTab.WithList:
+                    state.withList = []
+                    setLocalStorage(LS_withList_KEY, state.withList)
+                    break
+                case ActiveTab.RoadMap:
+                    state.roadMap = []
+                    setLocalStorage(LS_roadMap_KEY, state.roadMap)
+                    break
+                case ActiveTab.BuyInTheStore:
+                    state.buyInTheStore = []
+                    setLocalStorage(LS_buyInTheStore_KEY, state.buyInTheStore)
+                    break
+            }
         }
     }
 })
